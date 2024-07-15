@@ -109,5 +109,10 @@ def add_review(request: Request, id: int, user_name: str=Form(...), rating: str=
     db.add(review)
     db.commit()
 
-    return RedirectResponse(url=request.url_for('details', id=id), status_code=status.HTTP_303_SEE_OTHER)
+    # return RedirectResponse(url=request.url_for('details', id=id), status_code=status.HTTP_303_SEE_OTHER)
+    scheme = request.url.scheme  # 'http' or 'https'
+    host = request.headers.get('x-forwarded-host')  # May need to consider 'x-forwarded-host' if behind a proxy
+    base_url = f"{scheme}://{host}"
+    redirect_url = f"{base_url}/details/{id}"  
 
+    return RedirectResponse(url=redirect_url, status_code=status.HTTP_303_SEE_OTHER)
