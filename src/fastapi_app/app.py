@@ -8,6 +8,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.sql import func
+from typing import Optional
 
 from azure.monitor.opentelemetry import configure_azure_monitor
 from .models import Restaurant, Review, engine
@@ -60,6 +61,7 @@ def create_restaurant(request: Request):
 
 @app.post('/add', response_class=RedirectResponse)
 async def add_restaurant(request: Request, restaurant_name: str=Form(...), street_address: str=Form(...), description: str=Form(...)):
+    print("add restaurant handler")
     print(f"name: {restaurant_name} address: {street_address} description: {description}")
     restaurant = Restaurant()
     restaurant.name = restaurant_name

@@ -21,7 +21,7 @@
   </div>
   <div class="row">
       <div class="col-md-2 fw-bold">Rating:</div>
-      <div class="col">{{ restaurant.avg_rating|float }} ({{ restaurant.review_count }} {% if restaurant.review_count == 1 %} review{% else %} reviews{% endif %})</div>                
+      <div class="col">{% if restaurant.review_count %} {{ restaurant.avg_rating|round(3) }} ({{ restaurant.review_count }} {% if restaurant.review_count == 1 %} review{% else %} reviews{% endif %}) {% else %} No ratings yet {% endif %}</div>                
   </div>
 
   <h4 class="mt-5">Reviews</h4>
@@ -72,35 +72,35 @@
 
                 <div class="mb-3">                        
                     <label for="user_name" class="form-label fw-bold">Your name</label>
-                    <input type="text" class="form-control" id="user_name" name="user_name">
+                    <input type="text" class="form-control" id="user_name" name="user_name" required>
                   </div>
                   <div class="mb-3">
                     <label class="form-label fw-bold">Rating</label>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating1" value="1">
+                        <input class="form-check-input" type="radio" name="rating" id="rating1" value="1" required>
                         <label class="form-check-label" for="rating1">1</label>
                       </div>
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating2" value="2">
+                        <input class="form-check-input" type="radio" name="rating" id="rating2" value="2" required>
                         <label class="form-check-label" for="rating2">2</label>
                       </div>
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating3" value="3">
+                        <input class="form-check-input" type="radio" name="rating" id="rating3" value="3" required>
                         <label class="form-check-label" for="rating3">3</label>
                       </div>
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating4" value="4">
+                        <input class="form-check-input" type="radio" name="rating" id="rating4" value="4" required>
                         <label class="form-check-label" for="rating3">4</label>
                       </div>
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rating" id="rating5" value="5">
+                        <input class="form-check-input" type="radio" name="rating" id="rating5" value="5" required>
                         <label class="form-check-label" for="rating3">5</label>
                       </div>
                   </div>
                   <div class="mb-3">
                       <label for="review_text" class="form-label fw-bold">Comments</label>
-                      <input type="text" class="form-control" id="review_text" name="review_text">
+                      <input type="text" class="form-control" id="review_text" name="review_text" required>
                   </div>
               </div>
               <div class="modal-footer">
