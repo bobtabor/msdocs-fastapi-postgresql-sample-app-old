@@ -70,7 +70,14 @@ async def add_restaurant(request: Request, restaurant_name: str=Form(...), stree
         session.commit()
         session.refresh(restaurant)
 
-    return RedirectResponse(url=request.url_for('details', id=restaurant.id), status_code=status.HTTP_303_SEE_OTHER)
+    # Dynamically construct the base URL from the request
+    scheme = request.url.scheme  # 'http' or 'https'
+    host = request.headers.get('x-forwarded-host')  # May need to consider 'x-forwarded-host' if behind a proxy
+    base_url = f"{scheme}://{host}"
+    redirect_url = f"{base_url}"    
+
+    return RedirectResponse(url=redirect_url, status_code=status.HTTP_303_SEE_OTHER)
+
 
 @app.get("/details/{id}", response_class=HTMLResponse)
 def details(request: Request, id: int):
