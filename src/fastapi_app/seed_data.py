@@ -1,8 +1,4 @@
-import json
-import logging
-import pathlib
-
-from sqlmodel import Session, SQLModel, select
+from sqlmodel import SQLModel
 
 from fastapi_app import models
 
