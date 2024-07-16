@@ -11,15 +11,16 @@ products:
 - azure
 - azure-app-service
 - azure-postgresql
-urlFragment: azure-fastapi-postgres-flexible-appservice
-name: Deploy FastAPI Application with PostgreSQL on Azure App Service (Python)
-description: This project deploys a web application for a space travel agency using FastAPI with Python, and is set up for easy deployment with the Azure Developer CLI.
+- azure-virtual-network
+urlFragment: msdocs-fastapi-postgresql-sample-app
+name: Deploy FastAPI application with PostgreSQL on Azure App Service (Python)
+description: This project deploys a restaurant review web application using FastAPI with Python and Azure Database for PostgreSQL - Flexible Server. It's set up for easy deployment with the Azure Developer CLI.
 ---
 <!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
 
-# Deploy FastAPI Application with PostgreSQL via Azure App Service
+# Deploy FastAPI application with PostgreSQL via Azure App Service
 
-This project deploys a web application for a space travel agency using FastAPI. The application can be deployed to Azure with Azure App Service using the [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/overview).
+This project deploys a web application for a restaurnant review site using FastAPI. The application can be deployed to Azure with Azure App Service using the [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/overview).
 
 ## Opening the project
 
@@ -51,7 +52,7 @@ export POSTGRES_PASSWORD=<YOUR PASSWORD>
     python3 -m pip install -e src
     ```
 
-1. Apply database migrations and seed initial data:
+1. Apply database migrations:
 
     ```sh
     python3 src/fastapi_app/seed_data.py
@@ -119,3 +120,7 @@ to be stored as Github action secrets. To set that up, run:
 ```shell
 azd pipeline config
 ```
+
+## Getting help
+
+If you're working with this project and running into issues, please post in [Issues](/issues).
