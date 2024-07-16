@@ -114,4 +114,4 @@ def add_review(
     db.add(review)
     db.commit()
 
-    return RedirectResponse(url=request.url_for("details", id=id), status_code=status.HTTP_303_SEE_OTHER)
+    return RedirectResponse(url=app.url_path_for("details", id=id), status_code=status.HTTP_303_SEE_OTHER)
