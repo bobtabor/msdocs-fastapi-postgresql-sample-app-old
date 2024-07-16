@@ -25,20 +25,20 @@ templates.env.globals["url_for"] = app.url_path_for
 
 
 # Dependency to get the database session
-def get_db():
+def get_db_session():
     with Session(engine) as session:
         yield session
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request, db: Session = Depends(get_db)):
+async def index(request: Request, session: Session = Depends(get_db_session)):
     print("root called")
     statement = (
         select(Restaurant, func.avg(Review.rating).label("avg_rating"), func.count(Review.id).label("review_count"))
         .outerjoin(Review, Review.restaurant == Restaurant.id)
         .group_by(Restaurant.id)
     )
-    results = db.exec(statement).all()
+    results = session.exec(statement).all()
 
     restaurants = []
     for restaurant, avg_rating, review_count in results:
@@ -52,33 +52,32 @@ async def index(request: Request, db: Session = Depends(get_db)):
 
 
 @app.get("/create", response_class=HTMLResponse)
-def create_restaurant(request: Request):
+async def create_restaurant(request: Request):
     print("Request for add restaurant page received")
     return templates.TemplateResponse("create_restaurant.html", {"request": request})
 
 
 @app.post("/add", response_class=RedirectResponse)
 async def add_restaurant(
-    request: Request, restaurant_name: str = Form(...), street_address: str = Form(...), description: str = Form(...)
+    request: Request, restaurant_name: str = Form(...), street_address: str = Form(...), description: str = Form(...),
+    session: Session = Depends(get_db_session)
 ):
     print(f"name: {restaurant_name} address: {street_address} description: {description}")
     restaurant = Restaurant()
     restaurant.name = restaurant_name
     restaurant.street_address = street_address
     restaurant.description = description
-    with Session(engine) as session:
-        session.add(restaurant)
-        session.commit()
-        session.refresh(restaurant)
+    session.add(restaurant)
+    session.commit()
+    session.refresh(restaurant)
 
     return RedirectResponse(url=app.url_path_for("details", id=restaurant.id), status_code=status.HTTP_303_SEE_OTHER)
 
 
 @app.get("/details/{id}", response_class=HTMLResponse)
-def details(request: Request, id: int):
-    with Session(engine) as session:
-        restaurant = session.exec(select(Restaurant).where(Restaurant.id == id)).first()
-        reviews = session.exec(select(Review).where(Review.restaurant == id)).all()
+async def details(request: Request, id: int, session: Session = Depends(get_db_session)):
+    restaurant = session.exec(select(Restaurant).where(Restaurant.id == id)).first()
+    reviews = session.exec(select(Review).where(Review.restaurant == id)).all()
 
     review_count = len(reviews)
 
@@ -97,13 +96,13 @@ def details(request: Request, id: int):
 
 
 @app.post("/review/{id}", response_class=RedirectResponse)
-def add_review(
+async def add_review(
     request: Request,
     id: int,
     user_name: str = Form(...),
     rating: str = Form(...),
     review_text: str = Form(...),
-    db: Session = Depends(get_db),
+    session: Session = Depends(get_db_session),
 ):
     review = Review()
     review.restaurant = id
@@ -111,7 +110,7 @@ def add_review(
     review.user_name = user_name
     review.rating = int(rating)
     review.review_text = review_text
-    db.add(review)
-    db.commit()
+    session.add(review)
+    session.commit()
 
     return RedirectResponse(url=app.url_path_for("details", id=id), status_code=status.HTTP_303_SEE_OTHER)
