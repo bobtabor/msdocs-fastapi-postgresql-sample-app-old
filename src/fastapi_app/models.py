@@ -2,8 +2,8 @@
 # ruff: noqa: UP006
 import os
 import typing
-
 from datetime import datetime
+
 from sqlmodel import Field, SQLModel, create_engine
 
 POSTGRES_USERNAME = os.environ.get("POSTGRES_USERNAME")
