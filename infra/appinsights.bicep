@@ -1,12 +1,22 @@
-metadata description = 'Creates a dashboard for an Application Insights instance.'
-param name string
-param applicationInsightsName string
-param location string = resourceGroup().location
-param tags object = {}
+param prefix string
+param location string
+param tags object
+param workspaceId string
+
+resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: '${prefix}-appinsights'
+  location: location
+  tags: tags
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: workspaceId
+  }
+}
 
 // 2020-09-01-preview because that is the latest valid version
 resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-preview' = {
-  name: name
+  name: '${prefix}-dashboard'
   location: location
   tags: tags
   properties: {
@@ -1231,6 +1241,4 @@ resource applicationInsightsDashboard 'Microsoft.Portal/dashboards@2020-09-01-pr
   }
 }
 
-resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing = {
-  name: applicationInsightsName
-}
+output APPLICATIONINSIGHTS_CONNECTION_STRING string = applicationInsights.properties.ConnectionString
