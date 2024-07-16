@@ -45,13 +45,11 @@ export POSTGRES_PASSWORD=<YOUR PASSWORD>
     python3 -m pip install -r src/requirements.txt
     ```
 
-
 1. Install the app as an editable package:
 
     ```sh
     python3 -m pip install -e src
     ```
-
 
 1. Apply database migrations and seed initial data:
 
@@ -66,7 +64,6 @@ If you're running the app inside VS Code or GitHub Codespaces, you can use the "
 ```sh
 python3 -m uvicorn fastapi_app:app --reload --port=8000
 ```
-
 
 ## Running tests
 
@@ -122,4 +119,3 @@ to be stored as Github action secrets. To set that up, run:
 ```shell
 azd pipeline config
 ```
-
